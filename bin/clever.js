@@ -112,6 +112,13 @@ function run () {
       description: 'port identifying the TCP redirection',
       parser: Parsers.integer,
     }),
+
+    method: cliparse.argument('method', {
+      description: 'HTTP method'
+    }),
+    url: cliparse.argument('url', {
+      description: 'URL'
+    }),
   };
 
   // OPTIONS
@@ -635,6 +642,13 @@ function run () {
     commands: [serviceLinkAppCommand, serviceUnlinkAppCommand, serviceLinkAddonCommand, serviceUnlinkAddonCommand],
   }, service('list'));
 
+  // Sign command
+  const sign = lazyRequirePromiseModule('../src/commands/sign.js');
+  const signCommand = cliparse.command('sign', {
+    description: 'Sign an oauth request using user credentials',
+    args: [args.method, args.url],
+  }, sign('sign'));
+
   // SSH COMMAND
   const ssh = lazyRequirePromiseModule('../src/commands/ssh.js');
   const sshCommand = cliparse.command('ssh', {
@@ -740,6 +754,7 @@ function run () {
       restartCommand,
       scaleCommand,
       serviceCommands,
+      signCommand,
       sshCommand,
       statusCommand,
       stopCommand,
